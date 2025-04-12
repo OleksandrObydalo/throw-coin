@@ -8,10 +8,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalCount = document.getElementById('total-count');
     const headsPercent = document.getElementById('heads-percent');
     const tailsPercent = document.getElementById('tails-percent');
+    const headsProbabilityInput = document.getElementById('heads-probability');
     
     let heads = 0;
     let tails = 0;
     let isAnimating = false;
+
+    let headsProbability = 50; // Default to 50%
+
+    // Load saved probability from local storage if available
+    if (localStorage.getItem('headsProbability')) {
+        headsProbability = parseFloat(localStorage.getItem('headsProbability'));
+        headsProbabilityInput.value = headsProbability;
+    }
+    
+    headsProbabilityInput.addEventListener('change', () => {
+        headsProbability = parseFloat(headsProbabilityInput.value);
+        localStorage.setItem('headsProbability', headsProbability);
+    });
     
     // Check local storage for previous flips
     if (localStorage.getItem('headsCount')) {
@@ -54,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         void coin.offsetWidth;
         
         // Random result (0 for heads, 1 for tails)
-        const random = Math.floor(Math.random() * 2);
+        const random = Math.random() < (headsProbability / 100) ? 0 : 1;
         const resultText = random === 0 ? 'Орел' : 'Решка';
         
         // Set a random number of rotations between 5 and 10 plus final orientation

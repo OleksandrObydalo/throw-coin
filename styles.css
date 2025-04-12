@@ -38,6 +38,12 @@ h1 {
     height: 150px;
     transform-style: preserve-3d;
     transition: transform 0.1s ease-in;
+    border-radius: 50%;
+    background: 
+        linear-gradient(to bottom, #ddd 0%, #fff 50%, #ddd 100%);
+    box-shadow: 
+        0 0 5px rgba(0,0,0,0.2),
+        inset 0 0 15px rgba(0,0,0,0.1);
 }
 
 .side {
@@ -50,17 +56,32 @@ h1 {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */ /* Removed default shadow */
 }
 
 .heads {
-    background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b);
+    background: 
+        radial-gradient(ellipse at center, #d4af37 0%,#b8860b 70%, #daa520 100%); /* Gold color */
     z-index: 2;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.3); /* Inner shadow for depth */
 }
 
 .tails {
-    background: radial-gradient(circle at 30% 30%, #c0c0c0, #808080);
+    background:
+        radial-gradient(ellipse at center, #c0c0c0 0%, #a9a9a9 70%, #d3d3d3 100%); /* Silver color */
     transform: rotateY(180deg);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.3); /* Inner shadow for depth */
+}
+
+.heads svg, .tails svg {
+    width: 80%;
+    height: 80%;
+}
+
+.heads text, .tails text {
+    fill: #333;
+    font-weight: bold;
+    /* Adjust text size if needed */
 }
 
 .edge {
@@ -69,9 +90,10 @@ h1 {
     height: 100%;
     transform: rotateX(90deg);
     border-radius: 50%;
-    background: linear-gradient(to right, #b8860b, #ffd700, #b8860b, #ffd700);
+    background: linear-gradient(to right, #999, #ddd, #999, #ddd); /* Metallic edge */
     transform-style: preserve-3d;
     top: 0;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2); /* Subtle shadow for the edge */
 }
 
 .coin-flip {
@@ -208,6 +230,24 @@ button:disabled {
     margin-bottom: 15px;
 }
 
+.settings {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.settings label {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.settings input[type="number"] {
+    width: 60px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
 @media (max-width: 600px) {
     .coin {
         width: 120px;
@@ -227,4 +267,3 @@ button:disabled {
         padding: 15px;
     }
 }
-
