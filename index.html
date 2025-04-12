@@ -11,16 +11,45 @@
         
         <div class="coin-container">
             <div class="coin" id="coin">
-                <div class="heads"></div>
-                <div class="tails"></div>
+                <div class="side heads">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="48" fill="#ffd700" stroke="#b8860b" stroke-width="2"/>
+                        <text x="50" y="55" font-size="20" text-anchor="middle" fill="#333">ОРЕЛ</text>
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="#b8860b" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="side tails">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="48" fill="#c0c0c0" stroke="#808080" stroke-width="2"/>
+                        <text x="50" y="55" font-size="18" text-anchor="middle" fill="#333">РЕШКА</text>
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="#808080" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="edge"></div>
             </div>
         </div>
         
         <button id="flip-button">Бросить монету</button>
         
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-label">Орел:</span>
+                <span id="heads-count">0</span>
+                <span class="stat-percent" id="heads-percent">(0%)</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Решка:</span>
+                <span id="tails-count">0</span>
+                <span class="stat-percent" id="tails-percent">(0%)</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Всего:</span>
+                <span id="total-count">0</span>
+            </div>
+        </div>
+
         <div class="result-container">
             <p id="result">Нажмите кнопку, чтобы бросить монету</p>
-            <p id="counter">Брошено монет: 0</p>
             <div id="history"></div>
         </div>
         
