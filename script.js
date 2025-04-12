@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const headsPercent = document.getElementById('heads-percent');
     const tailsPercent = document.getElementById('tails-percent');
     const headsProbabilityInput = document.getElementById('heads-probability');
-    
+    const clearStatsButton = document.getElementById('clear-stats');
+
     let heads = 0;
     let tails = 0;
     let isAnimating = false;
@@ -25,6 +26,20 @@ document.addEventListener('DOMContentLoaded', () => {
     headsProbabilityInput.addEventListener('change', () => {
         headsProbability = parseFloat(headsProbabilityInput.value);
         localStorage.setItem('headsProbability', headsProbability);
+    });
+
+    clearStatsButton.addEventListener('click', () => {
+        heads = 0;
+        tails = 0;
+        localStorage.removeItem('headsCount');
+        localStorage.removeItem('tailsCount');
+        localStorage.removeItem('flipHistory');
+        headsCount.textContent = '0';
+        tailsCount.textContent = '0';
+        totalCount.textContent = '0';
+        headsPercent.textContent = '(0%)';
+        tailsPercent.textContent = '(0%)';
+        history.innerHTML = ''; // Clear history display
     });
     
     // Check local storage for previous flips
