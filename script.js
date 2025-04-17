@@ -42,6 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
         headsPercent.textContent = '(0%)';
         tailsPercent.textContent = '(0%)';
         history.innerHTML = ''; // Clear history display
+        
+        // Reset chart
+        differenceChart.data.labels = [];
+        differenceChart.data.datasets[0].data = [];
+        differenceChart.update();
     });
     
     // Check local storage for previous flips
@@ -71,6 +76,48 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // Chart initialization
+    const ctx = document.getElementById('difference-chart').getContext('2d');
+    const differenceChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Разница (Орел - Решка)',
+                data: [],
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    function updateDifferenceChart(resultText) {
+        const data = differenceChart.data;
+        
+        // Add a new label (flip number)
+        data.labels.push(data.labels.length + 1);
+        
+        // Calculate the difference (heads - tails)
+        const difference = heads - tails;
+        data.datasets[0].data.push(difference);
+
+        // Keep only the last 20 points
+        if (data.labels.length > 20) {
+            data.labels.shift();
+            data.datasets[0].data.shift();
+        }
+
+        differenceChart.update();
+    }
+
     flipButton.addEventListener('click', () => {
         if (isAnimating) return;
         
@@ -135,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `${resultText} (осталось бросков: ${flipQueue-1})` : 
                 resultText;
             
-            // Add to visual history (only showing last 10)
+            // Add to visual history
             const historyItem = document.createElement('div');
             historyItem.className = `history-item ${random === 0 ? 'heads-history' : 'tails-history'}`;
             historyItem.textContent = resultText;
@@ -146,6 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             history.appendChild(historyItem);
+            
+            // Update difference chart
+            updateDifferenceChart(resultText);
             
             isAnimating = false;
             flipQueue--;

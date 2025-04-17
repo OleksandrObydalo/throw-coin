@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Быть или не быть - Бросок монеты</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -64,6 +65,10 @@
         <div class="result-container">
             <p id="result">Нажмите кнопку, чтобы бросить монету</p>
             <div id="history"></div>
+        </div>
+        
+        <div class="graph-container">
+            <canvas id="difference-chart"></canvas>
         </div>
         
         <div class="wisdom">
