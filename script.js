@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const headsProbabilityInput = document.getElementById('heads-probability');
     const clearStatsButton = document.getElementById('clear-stats');
     const flipCountInput = document.getElementById('flip-count');
+    const chartScaleSelect = document.getElementById('chart-scale');
 
     let heads = 0;
     let tails = 0;
@@ -30,6 +31,28 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('headsProbability', headsProbability);
     });
 
+    chartScaleSelect.addEventListener('change', () => {
+        updateChartScale();
+    });
+
+    function updateChartScale() {
+        const scale = parseInt(chartScaleSelect.value);
+        const data = differenceChart.data;
+        
+        if (scale === 0) {
+            // Show all data points
+            differenceChart.data.labels = data.labels;
+            differenceChart.data.datasets[0].data = differenceChart.data.datasets[0].data;
+        } else {
+            // Show last 'scale' points
+            const startIndex = Math.max(0, data.labels.length - scale);
+            differenceChart.data.labels = data.labels.slice(startIndex);
+            differenceChart.data.datasets[0].data = differenceChart.data.datasets[0].data.slice(startIndex);
+        }
+        
+        differenceChart.update();
+    }
+
     clearStatsButton.addEventListener('click', () => {
         heads = 0;
         tails = 0;
@@ -41,14 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
         totalCount.textContent = '0';
         headsPercent.textContent = '(0%)';
         tailsPercent.textContent = '(0%)';
-        history.innerHTML = ''; // Clear history display
         
         // Reset chart
         differenceChart.data.labels = [];
         differenceChart.data.datasets[0].data = [];
         differenceChart.update();
     });
-    
+
     // Check local storage for previous flips
     if (localStorage.getItem('headsCount')) {
         heads = parseInt(localStorage.getItem('headsCount'));
@@ -61,21 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     updateStats();
-    
-    // Load history from local storage
-    if (localStorage.getItem('flipHistory')) {
-        const savedHistory = JSON.parse(localStorage.getItem('flipHistory'));
-        // Display only the last 10 flips
-        const recentHistory = savedHistory.slice(-10);
-        
-        recentHistory.forEach(item => {
-            const historyItem = document.createElement('div');
-            historyItem.className = `history-item ${item === 'Орел' ? 'heads-history' : 'tails-history'}`;
-            historyItem.textContent = item;
-            history.appendChild(historyItem);
-        });
-    }
-    
+
     // Chart initialization
     const ctx = document.getElementById('difference-chart').getContext('2d');
     const differenceChart = new Chart(ctx, {
@@ -109,13 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const difference = heads - tails;
         data.datasets[0].data.push(difference);
 
-        // Keep only the last 20 points
-        if (data.labels.length > 20) {
-            data.labels.shift();
-            data.datasets[0].data.shift();
-        }
-
-        differenceChart.update();
+        updateChartScale();
     }
 
     flipButton.addEventListener('click', () => {
