@@ -10,10 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const tailsPercent = document.getElementById('tails-percent');
     const headsProbabilityInput = document.getElementById('heads-probability');
     const clearStatsButton = document.getElementById('clear-stats');
+    const flipCountInput = document.getElementById('flip-count');
 
     let heads = 0;
     let tails = 0;
     let isAnimating = false;
+    let flipQueue = 0;
 
     let headsProbability = 50; // Default to 50%
 
@@ -72,9 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
     flipButton.addEventListener('click', () => {
         if (isAnimating) return;
         
+        const flipsToPerform = parseInt(flipCountInput.value) || 1;
+        flipQueue = flipsToPerform;
+        
+        performNextFlip();
+    });
+    
+    function performNextFlip() {
+        if (flipQueue <= 0 || isAnimating) return;
+        
         isAnimating = true;
         flipButton.disabled = true;
-        result.textContent = 'Монета подбрасывается...';
+        result.textContent = `Монета подбрасывается... (осталось: ${flipQueue})`;
         
         // Remove animation class
         coin.classList.remove('coin-flip');
@@ -120,7 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show result after animation
         setTimeout(() => {
-            result.textContent = resultText;
+            result.textContent = flipQueue > 1 ? 
+                `${resultText} (осталось бросков: ${flipQueue-1})` : 
+                resultText;
             
             // Add to visual history (only showing last 10)
             const historyItem = document.createElement('div');
@@ -135,9 +148,16 @@ document.addEventListener('DOMContentLoaded', () => {
             history.appendChild(historyItem);
             
             isAnimating = false;
-            flipButton.disabled = false;
+            flipQueue--;
+            
+            if (flipQueue > 0) {
+                // Continue with next flip after a short pause
+                setTimeout(performNextFlip, 300);
+            } else {
+                flipButton.disabled = false;
+            }
         }, 3000);
-    });
+    }
     
     function updateStats() {
         const total = heads + tails;
